@@ -4,14 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.SeekBar;
+import android.widget.*;
 import android.media.MediaPlayer;
 import android.content.Intent;
 import android.view.View;
+import android.graphics.Color;
 
 public class AudioActivity extends Activity implements Runnable
 {
+    private RelativeLayout backGround;
     private Button playButton;
     private Button pauseButton;
     private Button stopButton;
@@ -27,7 +28,7 @@ public class AudioActivity extends Activity implements Runnable
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio);
 
-
+        backGround = (RelativeLayout) findViewById(R.id.appBackground);
         videoButton = (Button) findViewById(R.id.videoButton);
         playButton = (Button) findViewById(R.id.playButton);
         pauseButton = (Button) findViewById(R.id.pauseButton);
@@ -92,20 +93,25 @@ public class AudioActivity extends Activity implements Runnable
 
 
             @Override
-            public void onStopTrackingTouch (SeekBar seekBar)
-            {}
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+            }
 
             @Override
-            public void onStartTrackingTouch (SeekBar seekBar)
+            public void onStartTrackingTouch(SeekBar seekBar)
             {
 
             }
+
             @Override
-            public void onProgressChanged (SeekBar seekBar,int progress, boolean fromUser)
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
                 if (fromUser)
                 {
                     soundPlayer.seekTo(progress);
+                } else
+                {
+                    changeColor();
                 }
             }
 
@@ -113,6 +119,25 @@ public class AudioActivity extends Activity implements Runnable
 
 
     }
+
+        public void changeColor()
+        {
+            int redColor;
+            int blueColor;
+            int greenColor;
+
+            redColor = (int) (Math.random() * 256);
+            greenColor = (int) (Math.random() * 256);
+            blueColor = (int) (Math.random() *  256);
+
+            backGround.setBackgroundColor(Color.rgb(redColor, greenColor, blueColor));
+        }
+
+
+
+
+
+
 
 
 
