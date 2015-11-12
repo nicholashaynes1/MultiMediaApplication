@@ -1,19 +1,73 @@
 package ctec.multimediaapplication;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.*;
+import android.net.Uri;
+import android.content.Intent;
 
-public class VideoActivity extends AppCompatActivity
+
+public class VideoActivity extends Activity
 {
+    private VideoView myPlayer;
+    private Button returnButton;
+    private MediaController myVideoController;
+    private Uri videoLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
+
+        myPlayer = (VideoView) findViewById(R.id.videoView);
+        returnButton = (Button) findViewById(R.id.backToSoundButton);
+
+        videoLocation = Uri.parse("android.resource://" + getPackageName() + '/' + R.raw.dancingskeleton);
+        myVideoController = new MediaController(this);
+
+        setupMedia();
+        setupListeners();
+
     }
+
+    private void setupMedia()
+    {
+        myPlayer.setMediaController(myVideoController);
+        myPlayer.setVideoURI(videoLocation);
+    }
+
+    private void setupListeners()
+    {
+        returnButton.setOnClickListener(new View.OnClickListener()
+        {
+           @Override
+        public void onClick(View view)
+           {
+               Intent returnIntent = new Intent();
+               setResult(RESULT_OK, returnIntent);
+               finish();
+           }
+        });
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

@@ -43,13 +43,12 @@ public class AudioActivity extends Activity implements Runnable
     }
 
 
-
     private void setupListeners()
     {
         playButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
-        public void onClick(View v)
+            public void onClick(View v)
             {
                 soundPlayer.start();
             }
@@ -57,73 +56,118 @@ public class AudioActivity extends Activity implements Runnable
 
         pauseButton.setOnClickListener(new View.OnClickListener()
         {
-           @Override
-        public void onClick(View v)
-           {
-               soundPlayer.pause();
-           }
+            @Override
+            public void onClick(View v)
+            {
+                soundPlayer.pause();
+            }
 
 
         });
 
         stopButton.setOnClickListener(new View.OnClickListener()
         {
-           @Override
-        public void onClick(View CurrentView)
-           {
-               soundPlayer.stop();
-               soundPlayer = MediaPlayer.create(getBaseContext(), R.raw.stokedandbroke);
-           }
+            @Override
+            public void onClick(View CurrentView)
+            {
+                soundPlayer.stop();
+                soundPlayer = MediaPlayer.create(getBaseContext(), R.raw.stokedandbroke);
+            }
         });
 
 
         videoButton.setOnClickListener(new View.OnClickListener()
         {
-           public void onClick(View currentView)
-           {
-               Intent myIntent = new Intent(currentView.getContext(), VideoActivity.class);
-               startActivityForResult(myIntent, 0);
+            public void onClick(View currentView)
+            {
+                Intent myIntent = new Intent(currentView.getContext(), VideoActivity.class);
+                startActivityForResult(myIntent, 0);
 
-           }
+            }
         });
 
 
-
-
-
-
-
-    }
-
-
-
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_audio, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
+        soundSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
+
+
+            @Override
+            public void onStopTrackingTouch (SeekBar seekBar)
+            {}
+
+            @Override
+            public void onStartTrackingTouch (SeekBar seekBar)
+            {
+
+            }
+            @Override
+            public void onProgressChanged (SeekBar seekBar,int progress, boolean fromUser)
+            {
+                if (fromUser)
+                {
+                    soundPlayer.seekTo(progress);
+                }
+            }
+
+        });
+
+
+    }
+
+
+
+
+
+
+        public void run()
+        {
+            int currentPosition = 0;
+            int soundTotal = soundPlayer.getDuration();
+            soundSeekBar.setMax(soundTotal);
+
+            while (soundPlayer != null && currentPosition < soundTotal)
+            {
+                try
+                {
+                    Thread.sleep(300);
+                    currentPosition = soundPlayer.getCurrentPosition();
+                }
+                catch(InterruptedException soundException)
+                {
+                    return;
+                }
+                catch(Exception otherException)
+                {
+                    return;
+                }
+                soundSeekBar.setProgress(currentPosition);
+            }
+        }
+
+        @Override
+        public boolean onCreateOptionsMenu (Menu menu)
+        {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_audio, menu);
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        @Override
+        public boolean onOptionsItemSelected (MenuItem item)
+        {
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            int id = item.getItemId();
+
+            //noinspection SimplifiableIfStatement
+            if (id == R.id.action_settings)
+            {
+                return true;
+            }
+
+            return super.onOptionsItemSelected(item);
+        }
 
 
 }
